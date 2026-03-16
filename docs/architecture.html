@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pratibha AI — Architecture</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #fdf8f0;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 24px;
+  }
+
+  h1 {
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 48px;
+  }
+
+  .diagram {
+    position: relative;
+    width: 100%;
+    max-width: 1100px;
+  }
+
+  /* ── Columns ── */
+  .columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .column {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .col-header {
+    text-align: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 10px 16px;
+    border-radius: 10px 10px 0 0;
+    color: #fff;
+  }
+
+  .col-frontend .col-header  { background: #3b6fd4; }
+  .col-backend  .col-header  { background: #2a9d8f; }
+  .col-cloud    .col-header  { background: #e76f51; }
+
+  .col-body {
+    border: 2px solid;
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: #fff;
+  }
+
+  .col-frontend .col-body { border-color: #3b6fd4; }
+  .col-backend  .col-body { border-color: #2a9d8f; }
+  .col-cloud    .col-body { border-color: #e76f51; }
+
+  /* ── Boxes ── */
+  .box {
+    border-radius: 8px;
+    padding: 11px 14px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1a1a2e;
+    position: relative;
+    line-height: 1.35;
+  }
+
+  .box .tag {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 400;
+    color: #666;
+    margin-top: 2px;
+  }
+
+  .col-frontend .box { background: #eef3fc; border: 1.5px solid #b3c8f0; }
+  .col-backend  .box { background: #e8f7f5; border: 1.5px solid #9dd4ce; }
+  .col-cloud    .box { background: #fdf0eb; border: 1.5px solid #f4b8a0; }
+
+  /* ── SVG arrows overlay ── */
+  .arrows-svg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: visible;
+  }
+
+  /* ── Legend ── */
+  .legend {
+    margin-top: 36px;
+    display: flex;
+    gap: 28px;
+    align-items: center;
+    font-size: 0.8rem;
+    color: #555;
+  }
+
+  .legend-item { display: flex; align-items: center; gap: 8px; }
+
+  .legend-line {
+    width: 36px; height: 2px;
+    background: #3b6fd4;
+    position: relative;
+  }
+  .legend-line::after {
+    content: '';
+    position: absolute;
+    right: -1px; top: -4px;
+    border: 5px solid transparent;
+    border-left: 7px solid #3b6fd4;
+  }
+  .legend-line.dashed {
+    background: repeating-linear-gradient(90deg, #e76f51 0 6px, transparent 6px 10px);
+  }
+  .legend-line.dashed::after { border-left-color: #e76f51; }
+
+  /* ── Footer ── */
+  .footer {
+    margin-top: 40px;
+    font-size: 0.75rem;
+    color: #aaa;
+  }
+</style>
+</head>
+<body>
+
+<h1>🎓 Pratibha AI — System Architecture</h1>
+<p class="subtitle">Real-time AI tutor for rural Indian children · Gemini Live 2.5 Flash · WebP lossless compression</p>
+
+<div class="diagram">
+
+  <!-- Columns -->
+  <div class="columns">
+
+    <!-- FRONTEND -->
+    <div class="column col-frontend">
+      <div class="col-header">Frontend · React / Vite</div>
+      <div class="col-body">
+        <div class="box" id="b-lang">🌐 Language Selector
+          <span class="tag">Hindi / English / Regional</span>
+        </div>
+        <div class="box" id="b-avatar">🧑 Avatar (4 States)
+          <span class="tag">WebP lossless · idle / listen / speak</span>
+        </div>
+        <div class="box" id="b-cam">📷 Camera · Adaptive Quality
+          <span class="tag">getUserMedia → canvas frames</span>
+        </div>
+        <div class="box" id="b-mic">🎙 Audio Capture
+          <span class="tag">PCM AudioWorklet → 16kHz chunks</span>
+        </div>
+        <div class="box" id="b-player">🔊 Audio Player
+          <span class="tag">PCM queue → Web Audio API</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BACKEND -->
+    <div class="column col-backend">
+      <div class="col-header">Backend · Node.js / Cloud Run</div>
+      <div class="col-body">
+        <div class="box" id="b-proxy">🔄 WebSocket Proxy
+          <span class="tag">Browser ↔ Vertex AI Live API</span>
+        </div>
+        <div class="box" id="b-imgapi">🖼 Image Generation API
+          <span class="tag">POST /api/generate-image</span>
+        </div>
+        <div class="box" id="b-profileapi">👤 Profile API
+          <span class="tag">GET / POST /api/profile</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- GOOGLE CLOUD -->
+    <div class="column col-cloud">
+      <div class="col-header">Google Cloud</div>
+      <div class="col-body">
+        <div class="box" id="b-gemini">⚡ Gemini Live 2.5 Flash
+          <span class="tag">Vertex AI · native audio · tool calls</span>
+        </div>
+        <div class="box" id="b-imgmodel">🎨 Gemini 2.5 Flash Image
+          <span class="tag">Vertex AI · educational illustrations</span>
+        </div>
+        <div class="box" id="b-firestore">🗄 Firestore
+          <span class="tag">Student profiles · weak topics</span>
+        </div>
+        <div class="box" id="b-cloudrun">☁ Cloud Run
+          <span class="tag">Hosts Node.js proxy server</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /columns -->
+
+  <!-- SVG arrows drawn after layout via JS -->
+  <svg class="arrows-svg" id="arrows"></svg>
+
+</div><!-- /diagram -->
+
+<div class="legend">
+  <div class="legend-item">
+    <div class="legend-line"></div>
+    <span>Audio / data flow</span>
+  </div>
+  <div class="legend-item">
+    <div class="legend-line dashed"></div>
+    <span>Cloud API call</span>
+  </div>
+</div>
+
+<p class="footer">Pratibha AI · Built for Google AI Hackathon 2026</p>
+
+<script>
+// Draw arrows between boxes after layout settles
+function getCenter(el) {
+  const r = el.getBoundingClientRect();
+  const dr = document.querySelector('.diagram').getBoundingClientRect();
+  return {
+    x: r.left - dr.left + r.width / 2,
+    y: r.top  - dr.top  + r.height / 2,
+    left:  r.left  - dr.left,
+    right: r.right - dr.left,
+    top:   r.top   - dr.top,
+    bottom:r.bottom- dr.top,
+  };
+}
+
+function arrow(svg, x1, y1, x2, y2, color = '#3b6fd4', dashed = false, label = '') {
+  const dx = x2 - x1, dy = y2 - y1;
+  const len = Math.sqrt(dx*dx + dy*dy);
+  const ux = dx/len, uy = dy/len;
+  // shorten ends
+  const pad = 8;
+  const sx = x1 + ux*pad, sy = y1 + uy*pad;
+  const ex = x2 - ux*(pad+6), ey = y2 - uy*(pad+6);
+
+  const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+  line.setAttribute('x1', sx); line.setAttribute('y1', sy);
+  line.setAttribute('x2', ex); line.setAttribute('y2', ey);
+  line.setAttribute('stroke', color);
+  line.setAttribute('stroke-width', '1.8');
+  if (dashed) line.setAttribute('stroke-dasharray', '5,4');
+  svg.appendChild(line);
+
+  // arrowhead
+  const angle = Math.atan2(ey - sy, ex - sx);
+  const a1x = ex - 9*Math.cos(angle-0.4), a1y = ey - 9*Math.sin(angle-0.4);
+  const a2x = ex - 9*Math.cos(angle+0.4), a2y = ey - 9*Math.sin(angle+0.4);
+  const poly = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+  poly.setAttribute('points', `${ex},${ey} ${a1x},${a1y} ${a2x},${a2y}`);
+  poly.setAttribute('fill', color);
+  svg.appendChild(poly);
+
+  if (label) {
+    const mx = (sx+ex)/2, my = (sy+ey)/2;
+    const t = document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x', mx); t.setAttribute('y', my - 5);
+    t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-size','10');
+    t.setAttribute('fill', color);
+    t.setAttribute('font-family','Segoe UI,system-ui,sans-serif');
+    t.textContent = label;
+    svg.appendChild(t);
+  }
+}
+
+function curvedArrow(svg, x1, y1, x2, y2, color = '#3b6fd4', dashed = false, label = '', bend = 40) {
+  const mx = (x1+x2)/2, my = (y1+y2)/2;
+  const cx = mx - bend * ((y2-y1)/Math.sqrt((x2-x1)**2+(y2-y1)**2));
+  const cy = my + bend * ((x2-x1)/Math.sqrt((x2-x1)**2+(y2-y1)**2));
+
+  const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+  const d = `M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`;
+  path.setAttribute('d', d);
+  path.setAttribute('fill','none');
+  path.setAttribute('stroke', color);
+  path.setAttribute('stroke-width','1.8');
+  if (dashed) path.setAttribute('stroke-dasharray','5,4');
+  svg.appendChild(path);
+
+  // arrowhead at end
+  const t = 0.97;
+  const ax = (1-t)*(1-t)*x1 + 2*(1-t)*t*cx + t*t*x2;
+  const ay = (1-t)*(1-t)*y1 + 2*(1-t)*t*cy + t*t*y2;
+  const angle = Math.atan2(y2-ay, x2-ax);
+  const a1x = x2 - 9*Math.cos(angle-0.4), a1y = y2 - 9*Math.sin(angle-0.4);
+  const a2x = x2 - 9*Math.cos(angle+0.4), a2y = y2 - 9*Math.sin(angle+0.4);
+  const poly = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+  poly.setAttribute('points', `${x2},${y2} ${a1x},${a1y} ${a2x},${a2y}`);
+  poly.setAttribute('fill', color);
+  svg.appendChild(poly);
+
+  if (label) {
+    const lx = (1-0.5)*(1-0.5)*x1 + 2*(1-0.5)*0.5*cx + 0.5*0.5*x2;
+    const ly = (1-0.5)*(1-0.5)*y1 + 2*(1-0.5)*0.5*cy + 0.5*0.5*y2;
+    const txt = document.createElementNS('http://www.w3.org/2000/svg','text');
+    txt.setAttribute('x', lx); txt.setAttribute('y', ly - 6);
+    txt.setAttribute('text-anchor','middle');
+    txt.setAttribute('font-size','10');
+    txt.setAttribute('fill', color);
+    txt.setAttribute('font-family','Segoe UI,system-ui,sans-serif');
+    txt.textContent = label;
+    svg.appendChild(txt);
+  }
+}
+
+function drawArrows() {
+  const svg = document.getElementById('arrows');
+  svg.innerHTML = '';
+
+  const blue   = '#3b6fd4';
+  const teal   = '#2a9d8f';
+  const orange = '#e76f51';
+  const purple = '#7b5ea7';
+
+  const mic    = getCenter(document.getElementById('b-mic'));
+  const player = getCenter(document.getElementById('b-player'));
+  const cam    = getCenter(document.getElementById('b-cam'));
+  const avatar = getCenter(document.getElementById('b-avatar'));
+  const lang   = getCenter(document.getElementById('b-lang'));
+  const proxy  = getCenter(document.getElementById('b-proxy'));
+  const imgapi = getCenter(document.getElementById('b-imgapi'));
+  const profapi= getCenter(document.getElementById('b-profileapi'));
+  const gemini = getCenter(document.getElementById('b-gemini'));
+  const imgmod = getCenter(document.getElementById('b-imgmodel'));
+  const fstore = getCenter(document.getElementById('b-firestore'));
+  const crun   = getCenter(document.getElementById('b-cloudrun'));
+
+  // Mic → Proxy (audio chunks)
+  arrow(svg, mic.right, mic.y, proxy.left, proxy.y, blue, false, 'PCM audio');
+
+  // Proxy → Player (audio response)
+  curvedArrow(svg, proxy.left, proxy.y + 10, player.right, player.y, teal, false, 'audio response', -30);
+
+  // Cam → Proxy (video frames)
+  arrow(svg, cam.right, cam.y, proxy.left, imgapi.y - 10, blue, false, 'video frames');
+
+  // Avatar ← Proxy (image swap signal — curved back)
+  curvedArrow(svg, proxy.left, proxy.y - 14, avatar.right, avatar.y, purple, true, 'tool call', 50);
+
+  // Lang → Proxy (system prompt)
+  arrow(svg, lang.right, lang.y, proxy.left, proxy.y - 28, teal, false, 'system prompt');
+
+  // Proxy ↔ Gemini Live
+  arrow(svg, proxy.right, proxy.y, gemini.left, gemini.y, blue, false, 'WS stream');
+  curvedArrow(svg, gemini.left, gemini.y + 12, proxy.right, proxy.y + 12, teal, false, 'audio + tools', -28);
+
+  // ImgAPI → Gemini Image
+  arrow(svg, imgapi.right, imgapi.y, imgmod.left, imgmod.y, orange, true, 'generate');
+
+  // Gemini Image → Avatar (illustration)
+  curvedArrow(svg, imgmod.left, imgmod.y - 10, avatar.right, avatar.y + 14, orange, true, 'illustration', 60);
+
+  // ProfileAPI ↔ Firestore
+  arrow(svg, profapi.right, profapi.y, fstore.left, fstore.y, teal, true, 'read/write');
+
+  // Backend hosted on Cloud Run
+  curvedArrow(svg, profapi.right, profapi.y + 14, crun.left, crun.y, '#aaa', true, 'hosted on', -20);
+}
+
+// Wait for layout
+window.addEventListener('load', () => setTimeout(drawArrows, 100));
+window.addEventListener('resize', drawArrows);
+</script>
+</body>
+</html>
